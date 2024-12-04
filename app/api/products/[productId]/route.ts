@@ -1,12 +1,15 @@
 import * as productService from "../../../../services/product.service";
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
-export async function GET(req: NextRequest, params: {productId: string}){
+export async function GET(req: NextRequest, {params}: {params: Promise<{productId: string}>}){
     try{
-        const product = await productService.getProductById(params.productId);
-        return product ? {status: 200, body: {product}} : {status: 404}
+        const {productId} = await params;
+        console.log(productId)
+        const product = await productService.getProductById(productId);
+        if(product) return NextResponse.json({product}, {status: 200})
+        return NextResponse.json({error: 'Product not found'}, {status: 404})
     }catch(e){
-        return {status: 500, body: {error: (e as Error).message}}
+        return NextResponse.json({error: (e as Error).message}, {status: 500})
     }
 }
 
@@ -20,9 +23,10 @@ export async function PUT(req: NextRequest){
     }
 }
 
-export async function DELETE(req: NextRequest, params: {productId: string}){
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{productId: string}>}){
     try{
-        const deletedProduct = await productService.deleteProduct(params.productId);
+        const {productId} = await params;
+        const deletedProduct = await productService.deleteProduct(productId);
         return {status: 200, body: {product: deletedProduct}}
     }catch(e){
         return {status: 500, body: {error: (e as Error).message}}
