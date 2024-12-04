@@ -6,7 +6,7 @@ export default function Header() {
     const pathname = usePathname();
     const pathStartWith = (path: string) => pathname.startsWith(path);
     return(
-        <header className="p-5 md:px-10">
+        <header className="p-5 md:px-10 xl:px-64">
             <div className="flex justify-between items-center">
                 <ul className="w-full hidden md:flex gap-3">
                     <li>
