@@ -1,5 +1,5 @@
 import { prisma } from "../prisma"
-import { Age, Product } from "@prisma/client"
+import { Age, Prisma, Product } from "@prisma/client"
 import { VariantParams } from "./variant.repository"
 
 export async function createProduct(product: ProductParams): Promise<Product> {
@@ -9,6 +9,8 @@ export async function createProduct(product: ProductParams): Promise<Product> {
         name: product.name,
         brand: product.brand,
         model: product.model,
+        category: product.category,
+        type: product.type,
         description: product.description,
         price: product.price,
         image: product.image,
@@ -84,10 +86,23 @@ export async function deleteProduct(id: string): Promise<Product> {
   }
 }
 
+export async function deleteAllProducts(): Promise<Prisma.BatchPayload> {
+  try{
+    const products = await prisma.product.deleteMany()
+    return products
+  }catch(e){
+    throw new Error((e as Error).message)
+  }finally{
+    await prisma.$disconnect()
+  }
+}
+
 export interface ProductParams {
     name: string
     brand: string
     model: string
+    category: string
+    type: string
     description?: string
     gender: string
     age: Age

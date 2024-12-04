@@ -1,7 +1,7 @@
 import { VariantParams } from '../repositories/variant.repository';
 import * as productRepository from '../repositories/product.repository';
 import * as variantService from '../services/variant.service';
-import { Product } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 
 export async function createProducts(products: productRepository.ProductParams[]): Promise<Product[]> {
   try{
@@ -52,4 +52,13 @@ export async function deleteProduct(id: string): Promise<Product> {
   }catch(e){
     throw new Error((e as Error).message)
   }
+}
+
+export async function deleteAllProducts(): Promise<Prisma.BatchPayload> {
+  try{
+    return await productRepository.deleteAllProducts()
+  }catch(e){
+    throw new Error((e as Error).message)
+  }
+  
 }

@@ -90,6 +90,8 @@ model Product {
   name        String
   brand       String
   model       String
+  category    String
+  type        String
   description String?
   price       Int
   image       String?

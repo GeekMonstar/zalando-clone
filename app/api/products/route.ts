@@ -20,3 +20,12 @@ export async function GET(){
         return NextResponse.json({error: (e as Error).message}, {status: 500})
     }
 }
+
+export async function DELETE(){
+    try{
+        const products = await productService.deleteAllProducts();
+        return NextResponse.json({products}, {status: 200})
+    }catch(e){
+        return NextResponse.json({error: (e as Error).message}, {status: 500})
+    }
+}
