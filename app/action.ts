@@ -6,3 +6,9 @@ export async function getPoducts(){
     console.log("Products:",poducts);
     return poducts;
 }
+
+export async function getProductsByBrand(brand: string){
+    const products = await productSeervice.getProductsByBrand(brand);
+    console.log("Products:",products);
+    return products;
+}

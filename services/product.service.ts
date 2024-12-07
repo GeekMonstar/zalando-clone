@@ -1,19 +1,12 @@
-import { VariantParams } from '../repositories/variant.repository';
 import * as productRepository from '../repositories/product.repository';
-import * as variantService from '../services/variant.service';
 import { Prisma, Product } from '@prisma/client';
 
 export async function createProducts(products: productRepository.ProductParams[]): Promise<Product[]> {
   try{
+    console.log(products);
     const newProducts = products.map(async (product) => {
-        const _product = await productRepository.createProduct(product)
-        if(product.variants){
-            const newVariants = product.variants.map(async (variant: VariantParams) => {
-                variant.productId = _product.id
-                return await variantService.createVariant(variant)
-            })
-            await Promise.all(newVariants)
-        }
+        console.log(product);
+        const _product = await productRepository.createProduct(product);
         return _product
     })
     return Promise.all(newProducts);
@@ -33,6 +26,14 @@ export async function getProducts(): Promise<Product[]> {
 export async function getProductById(id: string): Promise<Product | null> {
   try{
     return await productRepository.getProductById(id)
+  }catch(e){
+    throw new Error((e as Error).message)
+  }
+}
+
+export async function getProductsByBrand(brand: string): Promise<Product[]> {
+  try{
+    return await productRepository.getProductsByBrand(brand)
   }catch(e){
     throw new Error((e as Error).message)
   }

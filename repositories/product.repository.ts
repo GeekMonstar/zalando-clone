@@ -45,7 +45,11 @@ export async function getProducts(): Promise<Product[]> {
   try{
     const products = await prisma.product.findMany({
       include: {
-        variants: true
+        variants: {
+          include: {
+            sizes: true
+          }
+        }
       }
     })
     return products
@@ -61,9 +65,40 @@ export async function getProductById(id: string): Promise<Product | null> {
     const product = await prisma.product.findUnique({
       where: {
         id
+      },
+      include: {
+        variants: {
+          include: {
+            sizes: true
+          }
+        }
       }
     })
     return product
+  }catch(e){
+    throw new Error((e as Error).message)
+  }finally{
+    await prisma.$disconnect()
+  }
+}
+
+export async function getProductsByBrand(brand: string): Promise<Product[]> {
+  try{
+    const products = await prisma.product.findMany({
+      where: {
+        brand: {
+          contains: brand
+        }
+      },
+      include: {
+        variants: {
+          include: {
+            sizes: true
+          }
+        }
+      }
+    })
+    return products
   }catch(e){
     throw new Error((e as Error).message)
   }finally{
