@@ -1,5 +1,6 @@
 import { prisma } from "../prisma"
 import { Size, Variant } from "@prisma/client"
+import { SizeParams } from "./size.repository"
 
 export async function createVariant(variant: VariantParams): Promise<Variant> {
     try{
@@ -8,8 +9,6 @@ export async function createVariant(variant: VariantParams): Promise<Variant> {
                 name : variant.name,
                 description: variant.description,
                 additionnalPrice: variant.additionnalPrice,
-                size: variant.size,
-                stock: variant.stock,
                 images: variant.images,
                 product: {
                     connect: {
@@ -106,4 +105,5 @@ export interface VariantParams {
     size: Size,
     stock: number
     images: string[]
+    sizes: SizeParams[]
 }

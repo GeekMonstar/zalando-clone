@@ -1,7 +1,20 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { getPoducts } from "./action";
+import { ProductCard } from "../components/cards";
+
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  useEffect(()=>{
+    getPoducts().then(data => {
+      setProducts(data);
+      console.log("Products:",data);
+    });
+  }, []);
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      
+    <div className="">
+      {products.map((product) => <ProductCard key={product.id} product={product} />)}
     </div>
   );
 }

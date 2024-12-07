@@ -4,8 +4,7 @@ import { VariantParams } from "./variant.repository"
 
 export async function createProduct(product: ProductParams): Promise<Product> {
   try{
-    const newProduct = await prisma.product.create({
-      data: {
+    const productStructure = {
         name: product.name,
         brand: product.brand,
         model: product.model,
@@ -17,9 +16,22 @@ export async function createProduct(product: ProductParams): Promise<Product> {
         gender: product.gender,
         age: product.age,
         variants: {
-          create: product.variants
+          create: product.variants.map(variant => ({
+            name: variant.name,
+            description: variant.description,
+            additionnalPrice: variant.additionnalPrice,
+            images: variant.images,
+            sizes: {
+              create: variant.sizes.map(size => ({
+                name: size.name,
+                stock: size.stock
+              }))
+            }
+          }))
         }
-      }
+    }
+    const newProduct = await prisma.product.create({
+      data: productStructure
     })
     return newProduct
   }catch(e){
@@ -31,7 +43,11 @@ export async function createProduct(product: ProductParams): Promise<Product> {
 
 export async function getProducts(): Promise<Product[]> {
   try{
-    const products = await prisma.product.findMany()
+    const products = await prisma.product.findMany({
+      include: {
+        variants: true
+      }
+    })
     return products
   }catch(e){
     throw new Error((e as Error).message)

@@ -109,16 +109,25 @@ model Variant {
   productId   String
   name        String
   description String?
-  size        Size
-  stock       Int
   additionnalPrice      Int
   images       String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  sizes       Size[]  
   OrderItem   OrderItem[]
   cartItem    CartItem[]
  
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Size {
+  id          String   @id @default(cuid())
+  name        SizeName
+  variantId   String
+  stock       Int
+  variant     Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Order {
@@ -186,7 +195,7 @@ enum Age {
   SENIOR
 }
 
-enum Size {
+enum SizeName {
   XS
   S
   M
