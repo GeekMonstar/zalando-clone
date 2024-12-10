@@ -17,9 +17,9 @@ export async function PUT(req: NextRequest){
     try{
         const {product} = await req.json();
         const updatedProduct = await productService.updateProduct(product);
-        return {status: 200, body: {product: updatedProduct}}
+        return NextResponse.json({product: updatedProduct}, {status: 200})
     }catch(e){
-        return {status: 500, body: {error: (e as Error).message}}
+        return NextResponse.json({error: (e as Error).message}, {status: 500})
     }
 }
 
@@ -27,8 +27,8 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{produ
     try{
         const {productId} = await params;
         const deletedProduct = await productService.deleteProduct(productId);
-        return {status: 200, body: {product: deletedProduct}}
+        return NextResponse.json({product: deletedProduct}, {status: 200})
     }catch(e){
-        return {status: 500, body: {error: (e as Error).message}}
+        return NextResponse.json({error: (e as Error).message}, {status: 500})
     }
 }
