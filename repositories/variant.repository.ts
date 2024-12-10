@@ -107,3 +107,7 @@ export interface VariantParams {
     images: string[]
     sizes: SizeParams[]
 }
+
+export interface VariantWithSizes extends Variant {
+    sizes: Size[]
+}

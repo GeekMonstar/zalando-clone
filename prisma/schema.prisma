@@ -172,6 +172,7 @@ model CartItem {
   productId   String
   variantId   String
   quantity    Int
+  size        SizeName
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
  

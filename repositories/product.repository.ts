@@ -1,6 +1,6 @@
 import { prisma } from "../prisma"
 import { Age, Prisma, Product } from "@prisma/client"
-import { VariantParams } from "./variant.repository"
+import { VariantParams, VariantWithSizes } from "./variant.repository"
 
 export async function createProduct(product: ProductParams): Promise<Product> {
   try{
@@ -93,7 +93,8 @@ export async function getProductsByBrand(brand: string): Promise<Product[]> {
       include: {
         variants: {
           include: {
-            sizes: true
+            sizes: true,
+            product: true
           }
         }
       }
@@ -160,4 +161,8 @@ export interface ProductParams {
     price: number
     image?: string
     variants: VariantParams[]
+}
+
+export interface IProduct extends Product {
+    variants: VariantWithSizes[]
 }

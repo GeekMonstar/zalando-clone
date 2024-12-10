@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
+import {Hind_Vadodara} from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "../components/header";
 import Navigation from "../components/navigation";
+
+const hindVadodara = Hind_Vadodara(
+  {
+    variable: "--font-hind-vadodara",
+    weight: ["400","500", "600", "700"],
+    style: "normal",
+    subsets: ["latin"],
+  }
+);
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${hindVadodara.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
         <Navigation />
