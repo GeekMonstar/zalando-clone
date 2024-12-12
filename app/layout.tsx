@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "../components/header";
 import Navigation from "../components/navigation";
+import { CartProvider } from "../contexts/cartContext";
 
 const hindVadodara = Hind_Vadodara(
   {
@@ -40,9 +41,11 @@ export default function RootLayout({
       <body
         className={`${hindVadodara.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <Navigation />
-        {children}
+        <CartProvider>
+          <Header />
+          <Navigation />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

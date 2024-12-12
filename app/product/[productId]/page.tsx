@@ -7,6 +7,8 @@ import { SelectSizeInput } from "../../../components/inputs";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { IProduct } from "../../../repositories/product.repository";
+import { useCart } from "../../../contexts/cartContext";
+import { SizeName } from "@prisma/client";
 
 export default function Page({params} : {params: Promise<{productId: string}>}) {
     const {productId} = use(params);
@@ -16,8 +18,9 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
     const [imageIndex, setImageIndex] = useState<number>(0);
     const [size, setSize] = useState<string | null>(null);
 
-    const searchParams = useSearchParams();
+    const {setCart} = useCart();
 
+    const searchParams = useSearchParams();
     useEffect(() => {
         console.log(searchParams);
         getProduct(productId).then((product: IProduct) => {
@@ -43,7 +46,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
 
     const addToCart = (e: MouseEvent<HTMLButtonElement>) => {
         console.log(product);
-        localStorage.setItem("cart", JSON.stringify({product, variant: product.variants[currentVariant], size, quantity: 1}));
+        setCart({variant: {...product.variants[currentVariant], product}, size: size as SizeName, quantity: 1});
         (e.target as HTMLElement).classList.add("bg-green-500", "border-green-500");
         (e.target as HTMLElement).innerText = "Ajouté !";
         setTimeout(() => {
