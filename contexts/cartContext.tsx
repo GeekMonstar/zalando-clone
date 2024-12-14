@@ -1,6 +1,5 @@
 "use client";
-
-import { createContext, use, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ICartVariant } from "../components/cards";
 import { SizeName } from "@prisma/client";
 
@@ -13,21 +12,18 @@ export function CartProvider({children}){
         const cart = localStorage.getItem("cart");
         if(cart){
             setCart(JSON.parse(cart));
+        }else{
+            localStorage.setItem("cart", JSON.stringify([]));
         }
     }, []);
 
-    const updateCart = (cartItem) => {
-        const {variant, size, quantity} = cartItem;
-        console.log(variant.id);
-        const index = cart.findIndex(cartItem => cartItem.variant.id === variant.id && cartItem.size === size);
-        if(index !== -1){
-            const newCart = [...cart];
-            newCart[index].quantity += quantity;
-            setCart(newCart);
-        }else{
-            setCart([...cart, {variant, size, quantity}]);
-        }
+    useEffect(() => {
+        console.log(cart);
         localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
+
+    const updateCart = (newCart: CartItemType[]) => {
+        setCart([...newCart]);
     };
 
     const clearCart = () => {
@@ -36,7 +32,7 @@ export function CartProvider({children}){
     }
 
     return(
-        <CartContext.Provider value={{cart, setCart: updateCart, clearCart}}>
+        <CartContext.Provider value={{cart, updateCart, clearCart}}>
             {children}
         </CartContext.Provider>
     )
@@ -58,6 +54,6 @@ export interface CartItemType {
 
 interface CartContextType {
     cart: CartItemType[];
-    setCart: (cartItem: CartItemType) => void;
+    updateCart: (newCart: CartItemType[]) => void;
     clearCart: () => void;
 }

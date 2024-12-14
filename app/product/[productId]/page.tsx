@@ -18,7 +18,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
     const [imageIndex, setImageIndex] = useState<number>(0);
     const [size, setSize] = useState<string | null>(null);
 
-    const {setCart} = useCart();
+    const {cart, updateCart} = useCart();
 
     const searchParams = useSearchParams();
     useEffect(() => {
@@ -46,7 +46,8 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
 
     const addToCart = (e: MouseEvent<HTMLButtonElement>) => {
         console.log(product);
-        setCart({variant: {...product.variants[currentVariant], product}, size: size as SizeName, quantity: 1});
+        updateCart([...cart, {variant: {...product.variants[currentVariant], product}, size: size as SizeName, quantity: 1}]);
+        localStorage.setItem("cart", JSON.stringify(cart));
         (e.target as HTMLElement).classList.add("bg-green-500", "border-green-500");
         (e.target as HTMLElement).innerText = "Ajouté !";
         setTimeout(() => {
