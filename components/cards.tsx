@@ -36,7 +36,7 @@ export function VariantCard({variant}: Readonly<{variant: IVariant}>){
     )
 }
 
-export function CartVariantCard({cartItem}: Readonly<{cartItem: CartItemType}>){
+export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: CartItemType, handleRemove: () => void}>){
     const {variant, size, quantity} = cartItem;
     const {product, name, additionnalPrice, images} = variant;
     return(
@@ -70,7 +70,7 @@ export function CartVariantCard({cartItem}: Readonly<{cartItem: CartItemType}>){
                         <option value={4}>4</option>
                         <option value={5}>5</option>
                     </select>
-                    <div className="">
+                    <div onClick={handleRemove} className="p-1 cursor-pointrer">
                         <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-labelledby="supprimer-:R2sub96:" focusable="false" aria-hidden="false" role="img"><title id="supprimer-:R2sub96:">Supprimer</title><path d="m13.057 11.996 7.723-7.723a.75.75 0 1 0-1.06-1.06l-7.724 7.723-7.723-7.724a.75.75 0 1 0-1.06 1.061l7.723 7.723-7.716 7.717a.75.75 0 1 0 1.06 1.06l7.716-7.716 7.717 7.716a.747.747 0 0 0 1.06 0 .75.75 0 0 0 0-1.06z"></path></svg>
                     </div>
                 </div>

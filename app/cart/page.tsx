@@ -5,10 +5,17 @@ import { CartVariantCard } from "../../components/cards";
 import { useCart } from "../../contexts/cartContext";
 
 export default function Page() {
-    const {cart} = useCart();
+    const {cart, updateCart} = useCart();
     useEffect(() => {
         document.title = `Mon panier (${cart.length > 0 ? `${cart.length} article${cart.length > 1 ? "s" : ""}`: "Aucun article"})`;
     }, [cart]);
+
+    const handleRemove = (index: number) => {
+        const newCart = [...cart];
+        newCart.splice(index, 1);
+        updateCart(newCart);
+    }
+
     return (
         <div className="p-3 lg:px-4 2xl:px-32">
             <div className="flex flex-col lg:flex-row gap-2">
@@ -19,7 +26,7 @@ export default function Page() {
                         <p>Envoyé par Zalando</p>
                     </div>
                     <div className="flex flex-col gap-2 mt-5">
-                            {cart.map((cartItem, index) => <CartVariantCard key={index} cartItem={cartItem} />)}
+                            {cart.map((cartItem, index) => <CartVariantCard key={index} cartItem={cartItem} handleRemove={()=>handleRemove(index)} />)}
                         </div>
                 </div>
                 <div className="lg:w-1/3">
