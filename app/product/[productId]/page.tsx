@@ -36,6 +36,12 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if(product){
+            document.title = `${product.brand} - ${product.name}`;
+        }
+    }, [product]);
+
     const handleChangeVariant = (index: number) => {
         setCurrentVariant(index);
     }

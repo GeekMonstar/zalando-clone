@@ -9,6 +9,7 @@ export default function Home() {
   const [newBalanceProducts, setNewBalanceProducts] = useState([]);
   const [adidasProducts, setAdidasProducts] = useState([]);
   useEffect(()=>{
+    document.title = "Zalando - home";
     getProductsByBrand("Nike").then(data => {
       setNikeProducts(data);
       console.log("Nike Products:",data);
