@@ -69,7 +69,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
             ) : (
                 <div className="lg:px-4 2xl:px-32 flex max-md:flex-col lg:justify-center">
                     <div className="hidden max-md:flex w-full">
-                        <Carousel width="100%" showArrows={true}>
+                        <Carousel showThumbs={false} showStatus={false} showArrows={true} showIndicators={true} selectedItem={imageIndex}>
                             {product.variants[currentVariant].images.map((image, index) => (
                                 <div key={index}>
                                     <img className="w-full h-full object-cover" src={image} alt="" />
