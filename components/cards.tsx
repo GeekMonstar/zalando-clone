@@ -79,6 +79,13 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
     )
 }
 
+export function CartLoader(){
+    return(
+        <div className="w-64 h-96 flex justify-center items-center bg-gray-100">
+        </div>
+    )
+}
+
 export interface IProduct extends Product {
     variants: Variant[]
 }
