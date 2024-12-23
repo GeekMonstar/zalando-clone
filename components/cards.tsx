@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Product, Variant } from "@prisma/client";
-import { CartItemType } from "../contexts/cartContext";
+import { CartItemType, useCart } from "../contexts/cartContext";
 
 export function ProductCard({product}: Readonly<{product: IProduct}>){
     const {name, brand,  price, variants} = product;
@@ -39,6 +39,17 @@ export function VariantCard({variant}: Readonly<{variant: IVariant}>){
 export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: CartItemType, handleRemove: () => void}>){
     const {variant, size, quantity} = cartItem;
     const {product, name, additionnalPrice, images} = variant;
+
+    const {cart, updateCart} = useCart();
+
+    const handleQuantityChange = (e) => {
+        updateCart(cart.map((item) => {
+            if(item.variant.id === variant.id){
+                return {...item, quantity: e.target.value}
+            }
+            return item;
+        }));
+    }
     return(
         <div className="relative flex gap-2 justify-between">
             <div className="flex gap-1">
@@ -52,18 +63,11 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
                     <p className="font-bold">{(product.price + additionnalPrice)/100}€</p>
                     <p>Couleur: {name}</p>
                     <p>Taille: {size}</p>
-                    <select className="hidden max-sm:block p-1 border-black border" name="" id="" value={quantity}>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                    </select>
                 </div>
             </div>
             </div>
             <div className="z-10 h-min flex flex items-center gap-2">
-                    <select className="hidden sm:block p-1 border-black border" name="" id="" value={quantity}>
+                    <select className="hidden sm:block p-1 border-black border" name="" id="" value={quantity} onChange={(e) => handleQuantityChange(e)}>
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>
@@ -81,7 +85,7 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
 
 export function CartLoader(){
     return(
-        <div className="w-64 h-96 flex justify-center items-center bg-gray-100">
+        <div style={{width: "256px", height: "480px"}} className="lex justify-center items-center bg-gray-100">
         </div>
     )
 }

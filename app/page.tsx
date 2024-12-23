@@ -26,7 +26,7 @@ export default function Home() {
         title="Découvrez la collection adidas de Zalando" 
         description="Lorem ipsum dolor sit amet consectetur adipisicing elit." 
         bgColor="zinc-500"
-        color="black"
+        color="white"
       />
     </div>
   );
