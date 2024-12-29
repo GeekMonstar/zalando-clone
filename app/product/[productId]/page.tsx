@@ -6,13 +6,13 @@ import { getProduct } from "./action";
 import { SelectSizeInput } from "../../../components/inputs";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { IProduct } from "../../../repositories/product.repository";
+import { ProductWithVariants } from "../../../repositories/product.repository";
 import { useCart } from "../../../contexts/cartContext";
 import { SizeName } from "@prisma/client";
 
 export default function Page({params} : {params: Promise<{productId: string}>}) {
     const {productId} = use(params);
-    const [product, setProduct] = useState<IProduct | null>(null);
+    const [product, setProduct] = useState<ProductWithVariants | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [currentVariant, setCurrentVariant] = useState<number>(0);
     const [imageIndex, setImageIndex] = useState<number>(0);
@@ -23,7 +23,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
     const searchParams = useSearchParams();
     useEffect(() => {
         console.log(searchParams);
-        getProduct(productId).then((product: IProduct) => {
+        getProduct(productId).then((product: ProductWithVariants) => {
             setProduct(product);
             setLoading(false);
             if(searchParams.has("variant")){
