@@ -15,9 +15,9 @@ export async function createProducts(products: productRepository.ProductParams[]
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(where?): Promise<Product[]> {
   try{
-    return await productRepository.getProducts()
+    return await productRepository.getProducts(where)
   }catch(e){
     throw new Error((e as Error).message)
   }

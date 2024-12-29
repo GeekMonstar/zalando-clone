@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "../components/header";
 import Navigation from "../components/navigation";
 import { CartProvider } from "../contexts/cartContext";
+import { GenderContextProvider } from "../contexts/genderContext";
 
 const hindVadodara = Hind_Vadodara(
   {
@@ -42,9 +43,11 @@ export default function RootLayout({
         className={`${hindVadodara.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CartProvider>
-          <Header />
-          <Navigation />
-          {children}
+          <GenderContextProvider>
+            <Header />
+            <Navigation />
+            {children}
+          </GenderContextProvider>
         </CartProvider>
       </body>
     </html>

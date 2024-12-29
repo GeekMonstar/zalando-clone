@@ -1,20 +1,26 @@
 import { prisma } from "../prisma"
-import { Age, Prisma, Product } from "@prisma/client"
+import { Age, Category, Gender, Prisma, Product, Type } from "@prisma/client"
 import { VariantParams, VariantWithSizes } from "./variant.repository"
 
 export async function createProduct(product: ProductParams): Promise<Product> {
   try{
-    const productStructure = {
+    const newProduct = await prisma.product.create({
+      data: {
         name: product.name,
         brand: product.brand,
         model: product.model,
-        category: product.category,
-        type: product.type,
+        category: product.category as Category,
+        type: product.type as Type,
         description: product.description,
         price: product.price,
         image: product.image,
-        gender: product.gender,
-        age: product.age,
+        gender: product.gender as Gender,
+        age: product.age as Age,
+        collection: {
+          connect: {
+            id: product.collectionId
+          }
+        },
         variants: {
           create: product.variants.map(variant => ({
             name: variant.name,
@@ -30,8 +36,6 @@ export async function createProduct(product: ProductParams): Promise<Product> {
           }))
         }
     }
-    const newProduct = await prisma.product.create({
-      data: productStructure
     })
     return newProduct
   }catch(e){
@@ -41,9 +45,10 @@ export async function createProduct(product: ProductParams): Promise<Product> {
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(where?): Promise<Product[]> {
   try{
     const products = await prisma.product.findMany({
+      where: where ? where : undefined,
       include: {
         variants: {
           include: {
@@ -160,9 +165,10 @@ export interface ProductParams {
     age: Age
     price: number
     image?: string
+    collectionId?: string
     variants: VariantParams[]
 }
 
-export interface IProduct extends Product {
+export interface ProductWithVariants extends Product {
     variants: VariantWithSizes[]
 }

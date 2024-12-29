@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect} from "react";
-import { HomeProdudctsSection } from "../components/sections";
-import { useGender } from "../contexts/genderContext";
+import { HomeProdudctsSection } from "../../components/sections";
+import { useGender } from "../../contexts/genderContext";
 
 export default function Home() {
   const {gender} = useGender();

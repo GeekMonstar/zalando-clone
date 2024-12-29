@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { Product, Variant } from "@prisma/client";
 import { CartItemType, useCart } from "../contexts/cartContext";
+import { numberToPrice } from "../lib/utils";
 
 export function ProductCard({product}: Readonly<{product: IProduct}>){
     const {name, brand,  price, variants} = product;
@@ -12,7 +14,7 @@ export function ProductCard({product}: Readonly<{product: IProduct}>){
             <div className="">
                 <h3 className="font-regular">{brand}</h3>
                 <p className="">{name}</p>
-                <p className="font-bold">{price/100}€</p>
+                <p className="font-bold">{numberToPrice(price)}</p>
             </div>
             <Link className="absolute left-0 top-0 w-full h-full" href={`/product/${product.id}`}></Link>
         </div>
@@ -29,7 +31,7 @@ export function VariantCard({variant}: Readonly<{variant: IVariant}>){
             <div className="">
                 <h3 className="font-regular">{product.brand}</h3>
                 <p className="">{product.name}</p>
-                <p className="font-bold">{(product.price + additionnalPrice)/100}€</p>
+                <p className="font-bold">{numberToPrice(product.price + additionnalPrice)}</p>
             </div>
             <Link className="absolute left-0 top-0 w-full h-full" href={`/product/${product.id}?variant=${variant.id}`}></Link>
         </div>
@@ -60,7 +62,7 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
                 <div className="">
                     <h3 className="font-regular">{product.brand}</h3>
                     <p className="">{product.name}</p>
-                    <p className="font-bold">{(product.price + additionnalPrice)/100}€</p>
+                    <p className="font-bold">{numberToPrice(product.price + additionnalPrice)}</p>
                     <p>Couleur: {name}</p>
                     <p>Taille: {size}</p>
                 </div>
@@ -74,7 +76,7 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
                         <option value={4}>4</option>
                         <option value={5}>5</option>
                     </select>
-                    <div onClick={handleRemove} className="p-1 cursor-pointrer">
+                    <div onClick={handleRemove} className="p-1 cursor-pointer">
                         <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-labelledby="supprimer-:R2sub96:" focusable="false" aria-hidden="false" role="img"><title id="supprimer-:R2sub96:">Supprimer</title><path d="m13.057 11.996 7.723-7.723a.75.75 0 1 0-1.06-1.06l-7.724 7.723-7.723-7.724a.75.75 0 1 0-1.06 1.061l7.723 7.723-7.716 7.717a.75.75 0 1 0 1.06 1.06l7.716-7.716 7.717 7.716a.747.747 0 0 0 1.06 0 .75.75 0 0 0 0-1.06z"></path></svg>
                     </div>
                 </div>

@@ -8,11 +8,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -25,11 +25,11 @@ model User {
   Authenticator Authenticator[]
   cart          Cart[]
   orders        Order[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -42,33 +42,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -79,104 +79,130 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }
 
-model Product {
-  id          String   @id @default(cuid())
+model Brand {
+  id          String       @id @default(cuid())
   name        String
-  brand       String
-  model       String
-  category    String
-  type        String
+  logo        String?
+  collections Collection[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Collection {
+  id          String    @id @default(cuid())
+  name        String
   description String?
-  price       Int
-  image       String?
-  gender      String
-  age         Age
-  variants    Variant[]
-  OrderItem   OrderItem[]
-  CartItem    CartItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  mediaType   String?
+  mediaSource String?
+  mainColor   String?
+  secondaryColor String?
+  brand       Brand     @relation(fields: [brandId], references: [id])
+  brandId     String
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  name         String
+  brand        String
+  model        String
+  category     String
+  type         String
+  description  String?
+  price        Int
+  image        String?
+  gender       Gender
+  age          Age
+  collection   Collection  @relation(fields: [collectionId], references: [id])
+  collectionId String
+  variants     Variant[]
+  OrderItem    OrderItem[]
+  CartItem     CartItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model Variant {
-  id          String   @id @default(cuid())
-  productId   String
-  name        String
-  description String?
-  additionnalPrice      Int
-  images       String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  sizes       Size[]  
-  OrderItem   OrderItem[]
-  cartItem    CartItem[]
- 
+  id               String      @id @default(cuid())
+  productId        String
+  name             String
+  description      String?
+  additionnalPrice Int
+  images           String[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  sizes            Size[]
+  OrderItem        OrderItem[]
+  cartItem         CartItem[]
+
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Size {
-  id          String   @id @default(cuid())
-  name        SizeName
-  variantId   String
-  stock       Int
-  variant     Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      SizeName
+  variantId String
+  stock     Int
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
-  id          String   @id @default(cuid())
-  userId      String
-  status      OrderStatus
-  total       Int
-  items       OrderItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
- 
+  id        String      @id @default(cuid())
+  userId    String
+  status    OrderStatus
+  total     Int
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OrderItem {
-  id          String   @id @default(cuid())
-  orderId     String
-  productId   String
-  variantId   String
-  quantity    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
- 
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  orderId   String
+  productId String
+  variantId String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
   variant Variant @relation(fields: [variantId], references: [id])
 }
 
 model Cart {
-  id          String   @id @default(cuid())
-  userId      String
-  items       CartItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
- 
+  id        String     @id @default(cuid())
+  userId    String
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CartItem {
-  id          String   @id @default(cuid())
-  cartId      String
-  productId   String
-  variantId   String
-  quantity    Int
-  size        SizeName
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
- 
-  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String
+  variantId String
+  quantity  Int
+  size      SizeName
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
   variant Variant @relation(fields: [variantId], references: [id])
 }
@@ -189,11 +215,17 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 enum Age {
+  BABY
+  INFANT
   KID
   TEEN
   ADULT
-  SENIOR
 }
 
 enum SizeName {
@@ -227,4 +259,31 @@ enum SizeName {
   EU_48
   EU_49
   EU_50
+}
+
+enum Type {
+  SHOES
+  CLOTHES
+  ACCESSORIES
+  ELECTRONICS
+  SPORT
+  BEAUTY
+}
+
+enum Category {
+  JACKET
+  SHIRT
+  TSHIRT
+  PANT
+  SUIT
+  DRESS
+  BOOT
+  SPORT
+  SNEAKERS
+  SANDALS
+  SLIPPERS
+  FLIPFLOP
+  HEELS
+  FLAT
+  WEDGE
 }
