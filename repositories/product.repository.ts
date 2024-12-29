@@ -7,7 +7,6 @@ export async function createProduct(product: ProductParams): Promise<Product> {
     const newProduct = await prisma.product.create({
       data: {
         name: product.name,
-        brand: product.brand,
         model: product.model,
         category: product.category as Category,
         type: product.type as Type,
@@ -16,6 +15,11 @@ export async function createProduct(product: ProductParams): Promise<Product> {
         image: product.image,
         gender: product.gender as Gender,
         age: product.age as Age,
+        brand: {
+          connect: {
+            id: product.brandId
+          }
+        },
         collection: {
           connect: {
             id: product.collectionId
@@ -87,13 +91,11 @@ export async function getProductById(id: string): Promise<Product | null> {
   }
 }
 
-export async function getProductsByBrand(brand: string): Promise<Product[]> {
+export async function getProductsByBrandId(brandId: string): Promise<Product[]> {
   try{
     const products = await prisma.product.findMany({
       where: {
-        brand: {
-          contains: brand
-        }
+        brandId
       },
       include: {
         variants: {
@@ -156,7 +158,7 @@ export async function deleteAllProducts(): Promise<Prisma.BatchPayload> {
 
 export interface ProductParams {
     name: string
-    brand: string
+    brandId: string
     model: string
     category: string
     type: string
@@ -170,5 +172,6 @@ export interface ProductParams {
 }
 
 export interface ProductWithVariants extends Product {
+    brandId: string
     variants: VariantWithSizes[]
 }

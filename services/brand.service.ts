@@ -1,4 +1,4 @@
-import { Brand } from '@prisma/client';
+import { Brand, Prisma } from '@prisma/client';
 import * as brandRepository from '../repositories/brand.repository';
 
 export async function createBrand(brand: brandRepository.BrandParams): Promise<Brand> {
@@ -36,6 +36,14 @@ export async function updateBrand(brand: brandRepository.BrandWithCollections): 
 export async function deleteBrand(id: string): Promise<Brand> {
     try{
         return await brandRepository.deleteBrand(id)
+    }catch(e){
+        throw new Error((e as Error).message)
+    }
+}
+
+export async function deleteAllBrands(): Promise<Prisma.BatchPayload> {
+    try{
+        return await brandRepository.deleteAllBrands()
     }catch(e){
         throw new Error((e as Error).message)
     }

@@ -92,6 +92,8 @@ model Brand {
   collections Collection[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  Product Product[]
 }
 
 model Collection {
@@ -102,7 +104,7 @@ model Collection {
   mediaSource String?
   mainColor   String?
   secondaryColor String?
-  brand       Brand     @relation(fields: [brandId], references: [id])
+  brand       Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
   brandId     String
   products    Product[]
   createdAt   DateTime  @default(now())
@@ -112,7 +114,8 @@ model Collection {
 model Product {
   id           String      @id @default(cuid())
   name         String
-  brand        String
+  brand        Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  brandId      String
   model        String
   category     String
   type         String

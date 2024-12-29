@@ -1,4 +1,4 @@
-import { Age, Category, Collection, Gender, Type } from "@prisma/client"
+import { Age, Category, Collection, Gender, Prisma, Type } from "@prisma/client"
 import { prisma } from "../prisma"
 import { ProductParams, ProductWithVariants } from "./product.repository"
 
@@ -10,7 +10,6 @@ export async function createCollection(collection: CollectionParams){
                 products: {
                     create: collection.products ? collection.products.map(product => ({
                         name: product.name,
-                        brand: product.brand,
                         model: product.model,
                         category: product.category as Category,
                         type: product.type as Type,
@@ -19,6 +18,11 @@ export async function createCollection(collection: CollectionParams){
                         image: product.image,
                         gender: product.gender as Gender,
                         age: product.age as Age,
+                        brand: {
+                            connect: {
+                                id: product.brandId
+                            }
+                        },
                         variants: {
                             create: product.variants ? product.variants.map(variant => ({
                                 name: variant.name,
@@ -95,6 +99,34 @@ export async function getCollectionById(id: string): Promise<Collection | null> 
     }
 }
 
+export async function getCollectionsByName(name: string): Promise<Collection[]> {
+    try{
+        const collections = await prisma.collection.findMany({
+            where: {
+                name: {
+                    contains: name
+                }
+            },
+            include: {
+                products: {
+                    include: {
+                        variants: {
+                            include: {
+                                sizes: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return collections
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
 export async function updateCollection(collection: Collection): Promise<Collection> {
     try{
         const updatedCollection = await prisma.collection.update({
@@ -112,6 +144,32 @@ export async function updateCollection(collection: Collection): Promise<Collecti
             }
         })
         return updatedCollection
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
+export async function deleteCollection(id: string): Promise<Collection> {
+    try{
+        const deletedCollection = await prisma.collection.delete({
+            where: {
+                id
+            }
+        })
+        return deletedCollection
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
+export async function deleteAllCollections(): Promise<Prisma.BatchPayload> {
+    try{
+        const collections = await prisma.collection.deleteMany()
+        return collections
     }catch(e){
         throw new Error((e as Error).message)
     }finally{

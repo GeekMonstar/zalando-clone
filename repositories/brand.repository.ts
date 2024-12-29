@@ -1,4 +1,4 @@
-import { Age, Brand, Gender } from "@prisma/client"
+import { Age, Brand, Gender, Prisma } from "@prisma/client"
 import { prisma } from "../prisma"
 import { CollectionParams, CollectionWithProducts } from "./collection.repository"
 
@@ -18,7 +18,6 @@ export async function createBrand(brand: BrandParams): Promise<Brand> {
                         products: {
                             create: collection.products ? collection.products.map(product => ({
                                 name: product.name,
-                                brand: product.brand,
                                 model: product.model,
                                 category: product.category,
                                 type: product.type,
@@ -27,6 +26,11 @@ export async function createBrand(brand: BrandParams): Promise<Brand> {
                                 image: product.image,
                                 gender: product.gender as Gender,
                                 age: product.age as Age,
+                                brand: {
+                                    connect: {
+                                        id: product.brandId
+                                    }
+                                },
                                 variants: {
                                     create: product.variants ? product.variants.map(variant => ({
                                         name: variant.name,
@@ -142,6 +146,8 @@ export async function updateBrand(brand: Brand): Promise<Brand> {
     }
     catch(e){
         throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
     }
 }
 
@@ -155,6 +161,19 @@ export async function deleteBrand(id: string): Promise<Brand> {
         return deletedBrand
     }catch(e){
         throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
+export async function deleteAllBrands(): Promise<Prisma.BatchPayload> {
+    try{
+        const deletedBrands = await prisma.brand.deleteMany()
+        return deletedBrands
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
     }
 }
 
