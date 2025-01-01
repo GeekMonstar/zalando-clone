@@ -1,24 +1,32 @@
 "use client";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import { useCart } from "../contexts/cartContext";
+import { useGender } from "../contexts/genderContext";
 
 export default function Header() {
+    const router = useRouter();
     const pathname = usePathname();
     const pathStartWith = (path: string) => pathname.startsWith(path);
     const {cart} = useCart();
+    const {gender, setGender} = useGender();
+    const handleGenderChange = (e, newGender) => {
+        e.preventDefault();
+        setGender(newGender);
+        router.push(`/home-${newGender.toLowerCase()}`);
+    }
     return(
         <header className="bg-white p-5 max-xl:px-4 2xl:px-32 3xl:px-64">
             <div className="flex justify-between items-center">
                 <ul className="w-full hidden md:flex gap-3">
                     <li>
-                        <Link className={`px-3 py-2 font-bold ${pathStartWith("/home-man") ? "bg-black text-white" : "text-black"}`} href="/home-man">Homme</Link>
+                        <Link onClick={(e)=>handleGenderChange(e, "MEN")} className={`px-3 py-2 font-bold ${gender === "MEN" ? "bg-black text-white" : "text-black"}`} href="/home-men">Homme</Link>
                     </li>
                     <li>
-                        <Link className={`px-3 py-2 font-bold ${pathStartWith("/home-woman") ? "bg-black text-white" : "text-black"}`} href="/home-weman">Femme</Link>
+                        <Link onClick={(e)=>handleGenderChange(e, "WOMEN")} className={`px-3 py-2 font-bold ${gender === "WOMEN" ? "bg-black text-white" : "text-black"}`} href="/home-women">Femme</Link>
                     </li>
                     <li>
-                        <Link className={`px-3 py-2 font-bold ${pathStartWith("/home-child") ? "bg-black text-white" : "text-black"}`} href="/home-child">Enfant</Link>
+                        <Link onClick={(e)=>handleGenderChange(e, "CHILDREN")} className={`px-3 py-2 font-bold ${gender === "CHILDREN" ? "bg-black text-white" : "text-black"}`} href="/home-children">Enfant</Link>
                     </li>
                 </ul>
                 <div className="w-full flex md:justify-center sm:justify-start">

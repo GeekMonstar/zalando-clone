@@ -100,7 +100,7 @@ export async function deleteVariant(id: string): Promise<Variant> {
 export interface VariantParams {
     productId: string
     name: string
-    description?: string
+    description?: {[key: string]: [key: string] | string}[],
     additionnalPrice: number
     size: Size,
     stock: number

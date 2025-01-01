@@ -4,7 +4,7 @@ import { useEffect, useState} from "react";
 import { CollectionSection } from "../../components/sections";
 import { useGender } from "../../contexts/genderContext";
 import { Collection } from "@prisma/client";
-import { getCollectionsForMen } from "./action";
+import { getCollectionsForChildren } from "./action";
 import { CollectionWithProducts } from "../../repositories/collection.repository";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(()=>{
     document.title = "Zalando - home";
     console.log(gender);
-    getCollectionsForMen().then(collections => {
+    getCollectionsForChildren().then(collections => {
       setCollections(collections);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps

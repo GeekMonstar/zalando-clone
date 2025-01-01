@@ -9,26 +9,19 @@ export async function createCollection(collection: CollectionParams){
                 ...collection,
                 products: {
                     create: collection.products ? collection.products.map(product => ({
-                        name: product.name,
-                        model: product.model,
+                        ...product,
                         category: product.category as Category,
                         type: product.type as Type,
-                        description: product.description,
-                        price: product.price,
-                        image: product.image,
                         gender: product.gender as Gender,
-                        age: product.age as Age,
+                        ages: product.ages as Age[],
                         brand: {
                             connect: {
-                                id: product.brandId
+                                id: collection.brandId
                             }
                         },
                         variants: {
                             create: product.variants ? product.variants.map(variant => ({
-                                name: variant.name,
-                                description: variant.description,
-                                additionnalPrice: variant.additionnalPrice,
-                                images: variant.images,
+                                ...variant,
                                 sizes: {
                                     create: variant.sizes ? variant.sizes.map(size => ({
                                         name: size.name,
@@ -127,6 +120,105 @@ export async function getCollectionsByName(name: string): Promise<Collection[]> 
     }
 }
 
+export async function getCollectionsByGender(genders: string[]): Promise<Collection[]> {
+    try{
+        const collections = await prisma.collection.findMany({
+            where: {
+                products: {
+                    some: {
+                        gender: {
+                            in: genders as Gender[]
+                        }
+                    }
+                }
+            },
+            include: {
+                products: {
+                    include: {
+                        variants: {
+                            include: {
+                                sizes: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return collections
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
+export async function getCollectionsByAges(age: string[]): Promise<Collection[]> {
+    try{
+        const collections = await prisma.collection.findMany({
+            where: {
+                products: {
+                    some: {
+                        ages: {
+                            hasSome: age as Age[]
+                        }
+                    }
+                }
+            },
+            include: {
+                products: {
+                    include: {
+                        variants: {
+                            include: {
+                                sizes: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return collections
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
+export async function getCollectionsByGenderAndAge(genders: string[], ages: string[]): Promise<Collection[]> {
+    try{
+        const collections = await prisma.collection.findMany({
+            where: {
+                ages: {
+                    hasSome: ages as Age[]
+                },
+                products: {
+                    some: {
+                        gender: {
+                            in: genders as Gender[]
+                        }
+                    }
+                }
+            },
+            include: {
+                products: {
+                    include: {
+                        variants: {
+                            include: {
+                                sizes: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return collections
+    }catch(e){
+        throw new Error((e as Error).message)
+    }finally{
+        await prisma.$disconnect()
+    } 
+}
+
 export async function updateCollection(collection: Collection): Promise<Collection> {
     try{
         const updatedCollection = await prisma.collection.update({
@@ -179,7 +271,9 @@ export async function deleteAllCollections(): Promise<Prisma.BatchPayload> {
 
 export interface CollectionParams {
     name: string
+    subname?: string
     description?: string
+    ages: Age[]
     mediaType?: string
     mediaSource?: string
     mainColor?: string

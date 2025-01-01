@@ -38,7 +38,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
 
     useEffect(() => {
         if(product){
-            document.title = `${product.brand} - ${product.name}`;
+            document.title = `${product.brand.name} - ${product.name}`;
         }
     }, [product]);
 
@@ -88,9 +88,9 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
                         </div>
                     </div>
                     <div className="p-5 flex flex-col gap-2">
-                        <p className="text-2xl">{product.brand}</p>
+                        <p className="text-2xl">{product.brand.name}</p>
                         <h1 className="font-bold text-2xl">{product.name}</h1>
-                        <p>{product?.description}</p>
+                        {/* <p>{product?.description}</p> */}
                         <p className="text-2xl font-semibold">{(product.price + product.variants[currentVariant].additionnalPrice)/100}€ <span className="text-zinc-500 text-sm">TVA incluse</span></p>
                         <p className="mt-10">Couleur: <span className="font-bold">{product.variants[currentVariant].name}</span></p>
                         <div className="flex gap-2">

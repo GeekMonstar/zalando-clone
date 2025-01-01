@@ -8,13 +8,13 @@ export async function createProduct(product: ProductParams): Promise<Product> {
       data: {
         name: product.name,
         model: product.model,
-        category: product.category as Category,
-        type: product.type as Type,
         description: product.description,
         price: product.price,
         image: product.image,
+        category: product.category as Category,
+        type: product.type as Type,
         gender: product.gender as Gender,
-        age: product.age as Age,
+        ages: product.ages as Age[],
         brand: {
           connect: {
             id: product.brandId
@@ -76,6 +76,7 @@ export async function getProductById(id: string): Promise<Product | null> {
         id
       },
       include: {
+        brand: true,
         variants: {
           include: {
             sizes: true
@@ -160,11 +161,11 @@ export interface ProductParams {
     name: string
     brandId: string
     model: string
-    category: string
-    type: string
-    description?: string
+    type: Type
+    category: Category
+    description?: {[key: string]: [key: string] | string}[]
     gender: string
-    age: Age
+    ages: Age[]
     price: number
     image?: string
     collectionId?: string

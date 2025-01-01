@@ -1,33 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import * as brandService from "../../../services/brand.service";
 
 export async function POST(req: NextRequest) {
+  console.log(req)
   const { brand } = await req.json();
   try{
-    if(!brand){
-        throw new Error("Brand is required");
-    }else{
-        const newBrand = await brandService.createBrand(brand);
-        if(newBrand){
-            return NextResponse.json({ brand: newBrand }, { status: 201 });
+        if(!brand){
+            throw new Error("Brand is required");
+        }else{
+            const newBrand = await brandService.createBrand(brand);
+            if(newBrand){
+                return NextResponse.json({ brand: newBrand }, { status: 201 });
+            }else{
+                throw new Error("Brand not created");
+            }
         }
-    }
   }catch(e){
     throw new Error((e as Error).message)
   }
 }
 
-export async function GET(req: NextRequest) {
-    const {where} = await req.json();
+export async function GET() {
   try{
-    const brands = await brandService.getBrands(where || undefined);
-    if(brands){
-        return NextResponse.json({ brands });
-    }else{
-        throw new Error("No brands found");
-    }
+    const brands = await brandService.getBrands();
+    return NextResponse.json({ brands });
   }catch(e){
-    throw new Error((e as Error).message)
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
 

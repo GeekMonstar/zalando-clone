@@ -33,15 +33,18 @@ export async function PUT(req: NextRequest) {
     }
 }
 
-export async function DELETE() {
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{collectionId: string}>}) {
     try{
-        const deletedCollection = await collectionService.deleteAllCollections();
+        console.log(params);
+        const {collectionId} = await params;
+        console.log(collectionId);
+        const deletedCollection = await collectionService.deleteCollection(collectionId);
         if(deletedCollection){
             return NextResponse.json({ collection: deletedCollection });
         }else{
             throw new Error("No collections found");
         }
     }catch(e){
-        throw new Error((e as Error).message)
+        return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }

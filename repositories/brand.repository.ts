@@ -9,34 +9,15 @@ export async function createBrand(brand: BrandParams): Promise<Brand> {
                 ...brand,
                 collections: {
                     create: brand.collections ? brand.collections.map(collection => ({
-                        name: collection.name,
-                        description: collection.description,
-                        mediaType: collection.mediaType,
-                        mediaSource: collection.mediaSource,
-                        mainColor: collection.mainColor,
-                        secondaryColor: collection.secondaryColor,
+                        ...collection,
                         products: {
                             create: collection.products ? collection.products.map(product => ({
-                                name: product.name,
-                                model: product.model,
-                                category: product.category,
-                                type: product.type,
-                                description: product.description,
-                                price: product.price,
-                                image: product.image,
+                                ...product,
                                 gender: product.gender as Gender,
-                                age: product.age as Age,
-                                brand: {
-                                    connect: {
-                                        id: product.brandId
-                                    }
-                                },
+                                ages: product.ages as Age[],
                                 variants: {
                                     create: product.variants ? product.variants.map(variant => ({
-                                        name: variant.name,
-                                        description: variant.description,
-                                        additionnalPrice: variant.additionnalPrice,
-                                        images: variant.images,
+                                        ...variant,
                                         sizes: {
                                             create: variant.sizes ? variant.sizes.map(size => ({
                                                 name: size.name,

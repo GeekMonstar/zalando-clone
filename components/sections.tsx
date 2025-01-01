@@ -1,7 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
 import { CartLoader, ProductCard, VariantCard } from "./cards";
 import { getProductsByBrand } from "../app/action";
+import { CollectionWithProducts } from "../repositories/collection.repository";
+import Link from "next/link";
 
 export function HomeProdudctsSection({brand, title, description, color, bgColor}:{brand: string, title: string, description: string, color?: string, bgColor?: string}){
     const [brandProducts, setBrandProducts] = useState([]);
@@ -51,6 +54,39 @@ export function HomeProdudctsSection({brand, title, description, color, bgColor}
                 {brandProducts.length !== 0 ? brandProducts.map((product, index) => {
                     if(product.variants.length === 0) return <ProductCard key={index} product={product} />
                     return product.variants.map((variant, index) => <VariantCard key={index} variant={variant} />)
+                })
+                : 
+                <>
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                </>}
+                </div>
+            </div>
+        </section>
+    )
+}
+
+export function CollectionSection({collection}:{collection: CollectionWithProducts}){
+    return(
+        <section className="min-h-96 pb-5 flex flex-col items-start gap-2">
+            <div className="w-full flex gap-3 lg:px-4 2xl:px-32" style={{background: collection.mainColor, paddingTop: "36px"}}>
+                <img width={700} height={300} style={{width: "700px", height: "300px" ,objectFit: "contain"}} src={collection.mediaSource} alt={collection.mediaSource} className="w-20 h-20" />
+                <div className="flex flex-col gap-3">
+                    <h2 className="font-bold text-2xl">{collection.name}</h2>
+                    <p className="text-2xl">{collection.subname}</p>
+                    <p>{collection.description}</p>
+                    <Link className="w-min border-2 border-black font-semibold px-3 py-2" href={`/collections/${collection.id}`}>Découvrir</Link>
+                </div>
+            </div>
+            <div className="w-full overflow-x-auto lg:px-4 2xl:px-32">
+                <div className="w-fit flex gap-2 items-center">
+                {collection.products.length !== 0 ? collection.products.map((product, index) => {
+                    return <ProductCard key={index} product={product} />
                 })
                 : 
                 <>

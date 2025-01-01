@@ -19,10 +19,9 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function GET(req: NextRequest) {
-    const {where} = await req.json();
+export async function GET() {
     try{
-        const collections = await collectionService.getCollections(where || undefined);
+        const collections = await collectionService.getCollections();
         if(collections){
             return NextResponse.json({ collections });
         }else{
