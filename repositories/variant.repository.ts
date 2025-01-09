@@ -1,6 +1,7 @@
 import { prisma } from "../prisma"
 import { Size, Variant } from "@prisma/client"
 import { SizeParams } from "./size.repository"
+import { ProductWithVariants } from "./product.repository"
 
 export async function createVariant(variant: VariantParams): Promise<Variant> {
     try{
@@ -98,7 +99,7 @@ export async function deleteVariant(id: string): Promise<Variant> {
 }
 
 export interface VariantParams {
-    productId: string
+    productId?: string
     name: string
     description?: {[key: string]: [key: string] | string}[],
     additionnalPrice: number
@@ -109,5 +110,6 @@ export interface VariantParams {
 }
 
 export interface VariantWithSizes extends Variant {
-    sizes: Size[]
+    sizes: Size[],
+    product: ProductWithVariants
 }

@@ -1,13 +1,11 @@
 "use client";
 import Link from "next/link";
-import {usePathname, useRouter} from "next/navigation";
+import { useRouter} from "next/navigation";
 import { useCart } from "../contexts/cartContext";
 import { useGender } from "../contexts/genderContext";
 
 export default function Header() {
     const router = useRouter();
-    const pathname = usePathname();
-    const pathStartWith = (path: string) => pathname.startsWith(path);
     const {cart} = useCart();
     const {gender, setGender} = useGender();
     const handleGenderChange = (e, newGender) => {
@@ -16,7 +14,7 @@ export default function Header() {
         router.push(`/home-${newGender.toLowerCase()}`);
     }
     return(
-        <header className="bg-white p-5 max-xl:px-4 2xl:px-32 3xl:px-64">
+        <header className="bg-white p-5 max-xl:px-4 xl:px-32 2xl:px-96">
             <div className="flex justify-between items-center">
                 <ul className="w-full hidden md:flex gap-3">
                     <li>

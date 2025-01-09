@@ -1,4 +1,4 @@
-import { Age, Brand, Gender, Prisma } from "@prisma/client"
+import { Brand, Prisma } from "@prisma/client"
 import { prisma } from "../prisma"
 import { CollectionParams, CollectionWithProducts } from "./collection.repository"
 
@@ -6,30 +6,7 @@ export async function createBrand(brand: BrandParams): Promise<Brand> {
     try{
         const newBrand = await prisma.brand.create({
             data: {
-                ...brand,
-                collections: {
-                    create: brand.collections ? brand.collections.map(collection => ({
-                        ...collection,
-                        products: {
-                            create: collection.products ? collection.products.map(product => ({
-                                ...product,
-                                gender: product.gender as Gender,
-                                ages: product.ages as Age[],
-                                variants: {
-                                    create: product.variants ? product.variants.map(variant => ({
-                                        ...variant,
-                                        sizes: {
-                                            create: variant.sizes ? variant.sizes.map(size => ({
-                                                name: size.name,
-                                                stock: size.stock
-                                            })) : []
-                                        }
-                                    })) : []
-                                }
-                            })) : []
-                        }
-                    })) : []
-                }
+                name: brand.name,
             }
         })
         return newBrand
@@ -45,15 +22,11 @@ export async function getBrands(where?): Promise<Brand[]> {
         const brands = await prisma.brand.findMany({
             where: where ? where : undefined,
             include: {
-                collections: {
-                    include: {
-                        products: {
+                products: {
+                    include:{
+                        variants: {
                             include: {
-                                variants: {
-                                    include: {
-                                        sizes: true
-                                    }
-                                }
+                                sizes: true
                             }
                         }
                     }
@@ -75,15 +48,11 @@ export async function getBrandById(id: string): Promise<Brand | null> {
                 id
             },
             include: {
-                collections: {
-                    include: {
-                        products: {
+                products: {
+                    include:{
+                        variants: {
                             include: {
-                                variants: {
-                                    include: {
-                                        sizes: true
-                                    }
-                                }
+                                sizes: true
                             }
                         }
                     }

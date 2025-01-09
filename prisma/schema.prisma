@@ -89,11 +89,10 @@ model Brand {
   id          String       @id @default(cuid())
   name        String
   logo        String?
-  collections Collection[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  Product Product[]
+  products Product[]
 }
 
 model Collection {
@@ -106,11 +105,10 @@ model Collection {
   mediaSource String?
   mainColor   String?
   secondaryColor String?
-  brand       Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
-  brandId     String
-  products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  products Product[]
 }
 
 model Product {
@@ -126,13 +124,13 @@ model Product {
   image        String?
   gender       Gender
   ages          Age[]
-  collection   Collection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId String
   variants     Variant[]
   OrderItem    OrderItem[]
   CartItem     CartItem[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+
+  collections Collection[]
 }
 
 model Variant {
@@ -235,6 +233,7 @@ enum Age {
 }
 
 enum SizeName {
+  ONESIZE
   XS
   S
   M

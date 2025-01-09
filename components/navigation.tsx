@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Navigation(){
     return (
-        <nav className="bg-white h-12 sm:p-0 lg:px-4 2xl:px-32 lg:gap-2 flex items-center justify-between border-b">
+        <nav className="bg-white h-12 sm:p-0 lg:px-4 xl:px-32 2xl:px-96 lg:gap-2 flex items-center justify-between border-b">
             <button className="h-full hidden max-lg:block p-3 border">
                 <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" focusable="false" aria-hidden="true"><path d="M.75 2.25h22.5a.75.75 0 0 0 0-1.5H.75a.75.75 0 0 0 0 1.5m22.5 19.5H.75a.75.75 0 0 0 0 1.5h22.5a.75.75 0 0 0 0-1.5m-22.5-9h12a.75.75 0 0 0 0-1.5h-12a.75.75 0 0 0 0 1.5"></path></svg>
             </button>

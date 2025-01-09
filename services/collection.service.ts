@@ -56,7 +56,7 @@ export async function getCollectionsByAges(ages: string[]): Promise<Collection[]
   }
 }
 
-export async function getCollectionsByGenderAndAges(genders: string[], ages: string[]): Promise<Collection[]> {
+export async function getCollectionsByGenderAndAges(genders: string[], ages: string[]) {
   try{
     const collections = await collectionRepository.getCollectionsByGenderAndAge(genders, ages);
     return collections;

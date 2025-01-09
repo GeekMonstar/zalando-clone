@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { Product, Variant } from "@prisma/client";
 import { CartItemType, useCart } from "../contexts/cartContext";
 import { numberToPrice } from "../lib/utils";
+import { ProductWithVariants } from "../repositories/product.repository";
+import { VariantWithSizes } from "../repositories/variant.repository";
 
-export function ProductCard({product}: Readonly<{product: IProduct}>){
+export function ProductCard({product}: Readonly<{product: ProductWithVariants}>){
     const {name, brand,  price, variants} = product;
     return(
         <div className="w-64 relative">
@@ -12,7 +13,7 @@ export function ProductCard({product}: Readonly<{product: IProduct}>){
                 <img className="w-full h-full object-cover" src={variants[0].images[0]} alt={name} />
             </div>
             <div className="">
-                <h3 className="font-regular">{brand}</h3>
+                <h3 className="font-regular">{brand.name}</h3>
                 <p className="">{name}</p>
                 <p className="font-bold">{numberToPrice(price)}</p>
             </div>
@@ -21,7 +22,7 @@ export function ProductCard({product}: Readonly<{product: IProduct}>){
     )
 }
 
-export function VariantCard({variant}: Readonly<{variant: IVariant}>){
+export function VariantCard({variant}: Readonly<{variant: VariantWithSizes}>){
     const {product, additionnalPrice, images} = variant;
     return(
         <div className="w-64 relative">
@@ -29,7 +30,7 @@ export function VariantCard({variant}: Readonly<{variant: IVariant}>){
                 <img className="w-full h-full object-cover" src={images[0]} alt={product.name} />
             </div>
             <div className="">
-                <h3 className="font-regular">{product.brand}</h3>
+                <h3 className="font-regular">{product.brand.name}</h3>
                 <p className="">{product.name}</p>
                 <p className="font-bold">{numberToPrice(product.price + additionnalPrice)}</p>
             </div>
@@ -60,7 +61,7 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
             </div>
             <div className="flex flex-col max-lg:flex-row gap-1">
                 <div className="">
-                    <h3 className="font-regular">{product.brand}</h3>
+                    <h3 className="font-regular">{product.brand.name}</h3>
                     <p className="">{product.name}</p>
                     <p className="font-bold">{numberToPrice(product.price + additionnalPrice)}</p>
                     <p>Couleur: {name}</p>
@@ -90,16 +91,4 @@ export function CartLoader(){
         <div style={{width: "256px", height: "480px"}} className="lex justify-center items-center bg-gray-100">
         </div>
     )
-}
-
-export interface IProduct extends Product {
-    variants: Variant[]
-}
-
-export interface IVariant extends Variant {
-    product: Product
-}
-
-export interface ICartVariant extends IVariant {
-    product: IProduct
 }

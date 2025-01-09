@@ -7,4 +7,14 @@
     opacity: .9;
 }
 
+.container {
+    padding: 5;
+    background-color: red;
+}
 
+@media screen and (min-width: 1024px) {
+    .container {
+        padding: 1.25rem clamp(24px, 10%, 138.5px);
+    }
+    
+}

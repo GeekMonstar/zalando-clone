@@ -36,7 +36,7 @@ export default function Page() {
                         <div className="w-full min-h-92 bg-zinc-100 text-black p-5">
                             <div className="w-full flex justify-between">
                                 <p className="text-lg">Sous-total:</p>
-                                <p className="text-lg">{numberToPrice(cart.reduce((acc, curr) => acc + curr.variant.product.price + curr.variant.additionnalPrice, 0))}</p>
+                                <p className="text-lg">{numberToPrice((cart.reduce((acc, curr) => acc + curr.variant.product.price + curr.variant.additionnalPrice, 0) * (cart.reduce((acc, curr) => acc + curr.quantity, 0))))}</p>
                             </div>
                             <div className="w-full flex justify-between">
                                 <p className="text-lg">Livraison:</p>

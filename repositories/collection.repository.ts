@@ -1,35 +1,24 @@
-import { Age, Category, Collection, Gender, Prisma, Type } from "@prisma/client"
+import { Age, Collection, Gender, Prisma } from "@prisma/client"
 import { prisma } from "../prisma"
-import { ProductParams, ProductWithVariants } from "./product.repository"
+import { ProductWithVariants } from "./product.repository"
 
 export async function createCollection(collection: CollectionParams){
     try{
         const newCollection = await prisma.collection.create({
             data: {
-                ...collection,
+                name: collection.name,
+                subname: collection.subname,
+                description: collection.description,
+                ages: {
+                    set: collection.ages as Age[]
+                },
+                mediaType: collection.mediaType,
+                mediaSource: collection.mediaSource,
+                mainColor: collection.mainColor,
+                secondaryColor: collection.secondaryColor,
                 products: {
-                    create: collection.products ? collection.products.map(product => ({
-                        ...product,
-                        category: product.category as Category,
-                        type: product.type as Type,
-                        gender: product.gender as Gender,
-                        ages: product.ages as Age[],
-                        brand: {
-                            connect: {
-                                id: collection.brandId
-                            }
-                        },
-                        variants: {
-                            create: product.variants ? product.variants.map(variant => ({
-                                ...variant,
-                                sizes: {
-                                    create: variant.sizes ? variant.sizes.map(size => ({
-                                        name: size.name,
-                                        stock: size.stock
-                                    })) : []
-                                }
-                            })) : []
-                        }
+                    connect: collection.products ? collection.products.map(product => ({
+                        id: product
                     })) : []
                 }
             }
@@ -48,7 +37,7 @@ export async function getCollections(where?): Promise<Collection[]> {
             where: where ? where : undefined,
             include: {
                 products: {
-                    include: {
+                    include:{
                         variants: {
                             include: {
                                 sizes: true
@@ -74,7 +63,7 @@ export async function getCollectionById(id: string): Promise<Collection | null> 
             },
             include: {
                 products: {
-                    include: {
+                    include:{
                         variants: {
                             include: {
                                 sizes: true
@@ -184,7 +173,7 @@ export async function getCollectionsByAges(age: string[]): Promise<Collection[]>
     }
 }
 
-export async function getCollectionsByGenderAndAge(genders: string[], ages: string[]): Promise<Collection[]> {
+export async function getCollectionsByGenderAndAge(genders: string[], ages: string[]){
     try{
         const collections = await prisma.collection.findMany({
             where: {
@@ -199,9 +188,17 @@ export async function getCollectionsByGenderAndAge(genders: string[], ages: stri
                     }
                 }
             },
-            include: {
+            select: {
+                id: true,
+                name: true,
+                subname: true,
+                description: true,
+                ages: true,
+                mediaType: true,
+                mediaSource: true,
                 products: {
                     include: {
+                        brand: true,
                         variants: {
                             include: {
                                 sizes: true
@@ -231,8 +228,7 @@ export async function updateCollection(collection: Collection): Promise<Collecti
                 mediaType: collection.mediaType,
                 mediaSource: collection.mediaSource,
                 mainColor: collection.mainColor,
-                secondaryColor: collection.secondaryColor,
-                brandId: collection.brandId
+                secondaryColor: collection.secondaryColor
             }
         })
         return updatedCollection
@@ -278,8 +274,7 @@ export interface CollectionParams {
     mediaSource?: string
     mainColor?: string
     secondaryColor?: string
-    brandId: string,
-    products?: ProductParams[]
+    products?: string[]
 }
 
 export interface CollectionWithProducts extends Collection {
