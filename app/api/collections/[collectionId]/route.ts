@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as collectionService from '../../../../services/collection.service';
 
-export async function GET(req: NextRequest, {params}: {params: {collectionId: string}}) {
+export async function GET(req: NextRequest, {params}: {params: Promise<{collectionId: string}>}) {
     const {collectionId} = await params;
     try{
         const brands = await collectionService.getCollectionById(collectionId);

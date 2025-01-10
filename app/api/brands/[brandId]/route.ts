@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as brandService from '../../../../services/brand.service';
 
-export async function GET(req: NextRequest, {params}: {params: {brandId: string}}) {
+export async function GET(req: NextRequest, {params}: {params: Promise<{brandId: string}>}) {
     const {brandId} = await params;
     try{
         const brand = await brandService.getBrandById(brandId);
@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest) {
     }
 }
 
-export async function DELETE(req: NextRequest, {params}: {params: {brandId: string}}) {
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{brandId: string}>}) {
     const {brandId} = await params;
     try{
         const deletedBrand = await brandService.deleteBrand(brandId);
