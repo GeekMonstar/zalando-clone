@@ -8,12 +8,6 @@ export async function getPoducts(){
     return poducts;
 }
 
-export async function getProductsByBrand(brand: string){
-    const products = await productSeervice.getProductsByBrand(brand);
-    console.log(`${brand} Products:`, products);
-    return products;
-}
-
 export async function getCollections(){
     const collections = await collectionService.getCollections();
     console.log("Collections:",collections);
