@@ -196,6 +196,8 @@ export async function getCollectionsByGenderAndAge(genders: string[], ages: stri
                 ages: true,
                 mediaType: true,
                 mediaSource: true,
+                mainColor: true,
+                secondaryColor: true,
                 products: {
                     include: {
                         brand: true,

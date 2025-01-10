@@ -29,3 +29,13 @@ export async function DELETE(){
         return NextResponse.json({error: (e as Error).message}, {status: 500})
     }
 }
+
+export async function PUT(){
+    try{
+        const products = await productService.updateProductOfBallCategory();
+        return NextResponse.json({products}, {status: 201})
+    }catch(e){
+        console.log(e);
+        return NextResponse.json({error: (e as Error).message}, {status: 500})
+    }
+}

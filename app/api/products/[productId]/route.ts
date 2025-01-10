@@ -13,10 +13,12 @@ export async function GET(req: NextRequest, {params}: {params: Promise<{productI
     }
 }
 
-export async function PUT(req: NextRequest){
+export async function PUT(req: NextRequest, {params}: {params: Promise<{productId: string}>}){
     try{
         const {product} = await req.json();
-        const updatedProduct = await productService.updateProduct(product);
+        const {productId} = await params;
+        const prod = await productService.getProductById(productId);
+        const updatedProduct = await productService.updateProduct({...prod, ...product});
         return NextResponse.json({product: updatedProduct}, {status: 200})
     }catch(e){
         return NextResponse.json({error: (e as Error).message}, {status: 500})

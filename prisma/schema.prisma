@@ -234,6 +234,12 @@ enum Age {
 
 enum SizeName {
   ONESIZE
+  S_1
+  S_2
+  S_3
+  S_4
+  S_5
+  S_6
   XS
   S
   M
@@ -280,6 +286,8 @@ enum Category {
   SHIRT
   TSHIRT
   SWEATSHIRT
+  TRACKSUIT
+  JERSEY
   PANT
   SUIT
   DRESS
@@ -293,4 +301,5 @@ enum Category {
   FLAT
   WEDGE
   BAG
+  BALL
 }

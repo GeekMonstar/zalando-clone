@@ -115,10 +115,10 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
                                         <button 
                                             key={d.name} 
                                             onClick={()=>setDescriptionsIsOpen({...descriptionsIsOpen, [d.name.toLowerCase()]: !descriptionsIsOpen[d.name.toLowerCase()]})}
-                                            className={`flex justify-between items-center py-4 px-3 border-t-2 ${index === product.description.length - 1 ? "border-b-2 border-b" : ""}`}>
+                                            className={`font-semibold text-lg flex justify-between items-center py-4 px-3 border-t-2 ${index === product.description.length - 1 ? "border-b-2 border-b" : ""}`}>
                                             {d.name}
                                             <svg 
-                                                style={{transform: `rotate(${descriptionsIsOpen[d.name.toLowerCase()] ? "180deg": "0"})`}}
+                                                // style={{transform: `rotate(${descriptionsIsOpen[d.name.toLowerCase()] ? "180deg": "0"})`}}
                                                 viewBox="0 0 24 24" 
                                                 width="1em" 
                                                 height="1em" 
@@ -128,24 +128,12 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
                                                     <path d="M2.859 7.475a.75.75 0 0 1 1.06 0l7.55 7.55a.75.75 0 0 0 1.06 0l7.551-7.55a.75.75 0 1 1 1.061 1.06l-7.55 7.55a2.25 2.25 0 0 1-3.182 0l-7.55-7.55a.75.75 0 0 1 0-1.06"></path>
                                             </svg>
                                         </button>
-                                        <div className={`px-3 ${descriptionsIsOpen[d.name.toLowerCase()] ? "block" : "hidden"}`}>
-                                            {typeof JSON.parse(d.value) === "string" ? 
-                                                d.value : 
-                                                (
-                                                    <ul>
-                                                        {JSON.parse(d.value)["Matière"] && <li><span className="font-semibold">Matière</span>: {JSON.parse(d.value)["Matière"]}</li>}
-                                                        {JSON.parse(d.value)["Composition"] && <li><span className="font-semibold">Composition</span>: {JSON.parse(d.value)["Composition"]}</li>}
-                                                        {JSON.parse(d.value)["Conseils d'entretien"] && <li><span className="font-semibold">Conseils d&apos;entretien</span>: {JSON.parse(d.value)["Conseils d'entretien"]}</li>}
-                                                        {JSON.parse(d.value)["Référence"] && <li><span className="font-semibold">Référence</span>: {JSON.parse(d.value)["Référence"]}</li>}
-                                                        {JSON.parse(d.value)["Forme du col"] && <li><span className="font-semibold">Forme du col</span>: {JSON.parse(d.value)["Forme du col"]}</li>}
-                                                        {JSON.parse(d.value)["Motif / Couleur"] && <li><span className="font-semibold">Motif / Couleur</span>: {JSON.parse(d.value)["Motif / Couleur"]}</li>}
-                                                        {JSON.parse(d.value)["Niveau de transparence"] && <li><span className="font-semibold">Niveau de transparence</span>: {JSON.parse(d.value)["Niveau de transparence"]}</li>}
-                                                        {JSON.parse(d.value)["Longueur"] && <li><span className="font-semibold">Longueur</span>: {JSON.parse(d.value)["Longueur"]}</li>}
-                                                        {JSON.parse(d.value)["Longueur totale"] && <li><span className="font-semibold">Longueur totale</span>: {JSON.parse(d.value)["Longueur totale"]}</li>}
-                                                        {JSON.parse(d.value)["Longueur des manches"] && <li><span className="font-semibold">Longueur des manches</span>: {JSON.parse(d.value)["Longueur des manches"]}</li>}
-                                                    </ul>
-                                                )
-                                            }
+                                        <div 
+                                            className={`px-3 ${descriptionsIsOpen[d.name.toLowerCase()] ? "block" : "hidden"}`}
+                                        >
+                                            {d.value.map((v, index) => (
+                                                <p key={index}><span className="font-semibold">{v.name}</span>: {v.value}</p>
+                                            ))}
                                         </div>
                                     </Fragment>
                                 )

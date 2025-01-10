@@ -15,13 +15,15 @@ export async function GET(req: NextRequest, {params}: {params: {collectionId: st
     }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: NextRequest, {params}: {params: Promise<{collectionId: string}>}) {
     const { collection } = await req.json();
+    const {collectionId} = await params;
     try{
         if(!collection){
             throw new Error("Collection object is required");
         }else{
-            const updatedCollection = await collectionService.updateCollection(collection);
+            const col = await collectionService.getCollectionById(collectionId);
+            const updatedCollection = await collectionService.updateCollection({...col, ...collection});
             if(updatedCollection){
                 return NextResponse.json({ collection: updatedCollection });
             }else{

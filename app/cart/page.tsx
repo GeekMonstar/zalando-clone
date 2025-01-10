@@ -18,7 +18,7 @@ export default function Page() {
     }
 
     return (
-        <div className="p-3 lg:px-4 2xl:px-32">
+        <div className="p-3 max-xl:px-4 xl:px-32 2xl:px-96">
             <div className={`${cart.length > 0 ? "flex flex-col lg:flex-row gap-2" : "w-full"} mx-auto`}>
                 {cart.length > 0 ?
                 <>

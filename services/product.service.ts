@@ -51,3 +51,11 @@ export async function deleteAllProducts(): Promise<Prisma.BatchPayload> {
   }
   
 }
+
+export async function updateProductOfBallCategory(){
+  try{
+    return await productRepository.updateProductOfBallCategory()
+  }catch(e){
+    throw new Error((e as Error).message)
+  }
+}
