@@ -6,6 +6,7 @@ import Header from "../components/header";
 import Navigation from "../components/navigation";
 import { CartProvider } from "../contexts/cartContext";
 import { GenderContextProvider } from "../contexts/genderContext";
+import { Footer } from "../components/footer";
 
 const hindVadodara = Hind_Vadodara(
   {
@@ -47,6 +48,7 @@ export default function RootLayout({
             <Header />
             <Navigation />
             {children}
+            <Footer />
           </GenderContextProvider>
         </CartProvider>
       </body>

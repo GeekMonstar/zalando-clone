@@ -108,7 +108,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
                             <SelectSizeInput sizes={product.variants[0].sizes} handleChange={setSize} />
                         </div>
                         <div className="flex flex-col">
-                            {product.description.map((d: {name: string, value: string}, index) => {
+                            {product.description.map((d: {name: string, value: {name: string, value: string}[]}, index) => {
                                 // setDescriptionsIsOpen([...descriptionsIsOpen, false]);
                                 return (
                                     <Fragment key={index}>
