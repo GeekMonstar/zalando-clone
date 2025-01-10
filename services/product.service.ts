@@ -11,9 +11,9 @@ export async function createProducts(products: productRepository.ProductParams[]
   }
 }
 
-export async function getProducts(where?): Promise<Product[]> {
+export async function getProducts(): Promise<Product[]> {
   try{
-    return await productRepository.getProducts(where)
+    return await productRepository.getProducts()
   }catch(e){
     throw new Error((e as Error).message)
   }
@@ -50,12 +50,4 @@ export async function deleteAllProducts(): Promise<Prisma.BatchPayload> {
     throw new Error((e as Error).message)
   }
   
-}
-
-export async function updateProductOfBallCategory(){
-  try{
-    return await productRepository.updateProductOfBallCategory()
-  }catch(e){
-    throw new Error((e as Error).message)
-  }
 }

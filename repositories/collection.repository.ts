@@ -64,6 +64,7 @@ export async function getCollectionById(id: string): Promise<Collection | null> 
             include: {
                 products: {
                     include:{
+                        brand: true,
                         variants: {
                             include: {
                                 sizes: true

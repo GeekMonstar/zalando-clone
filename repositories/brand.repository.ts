@@ -17,21 +17,20 @@ export async function createBrand(brand: BrandParams): Promise<Brand> {
     }
 }
 
-export async function getBrands(where?): Promise<Brand[]> {
+export async function getBrands(): Promise<Brand[]> {
     try{
         const brands = await prisma.brand.findMany({
-            where: where ? where : undefined,
-            include: {
-                products: {
-                    include:{
-                        variants: {
-                            include: {
-                                sizes: true
-                            }
-                        }
-                    }
-                }
-            }
+            // include: {
+            //     products: {
+            //         include:{
+            //             variants: {
+            //                 include: {
+            //                     sizes: true
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         })
         return brands
     }catch(e){

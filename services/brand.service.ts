@@ -1,17 +1,22 @@
 import { Brand, Prisma } from '@prisma/client';
 import * as brandRepository from '../repositories/brand.repository';
 
-export async function createBrand(brand: brandRepository.BrandParams): Promise<Brand> {
+export async function createBrands(brands: brandRepository.BrandParams[]): Promise<Brand[]> {
     try{
-        return await brandRepository.createBrand(brand)
+        const newBrands = [];
+        for(const brand of brands){
+            const newBrand = await brandRepository.createBrand(brand);
+            newBrands.push(newBrand);
+        }
+        return newBrands;
     }catch(e){
         throw new Error((e as Error).message)
     }
 }
 
-export async function getBrands(where?): Promise<Brand[]> {
+export async function getBrands(): Promise<Brand[]> {
     try{
-        return await brandRepository.getBrands(where)
+        return await brandRepository.getBrands()
     }catch(e){
         throw new Error((e as Error).message)
     }

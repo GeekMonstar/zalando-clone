@@ -3,12 +3,12 @@ import * as brandService from "../../../services/brand.service";
 
 export async function POST(req: NextRequest) {
   console.log(req)
-  const { brand } = await req.json();
+  const { brands } = await req.json();
   try{
-        if(!brand){
+        if(!brands){
             throw new Error("Brand is required");
         }else{
-            const newBrand = await brandService.createBrand(brand);
+            const newBrand = await brandService.createBrands(brands);
             if(newBrand){
                 return NextResponse.json({ brand: newBrand }, { status: 201 });
             }else{
