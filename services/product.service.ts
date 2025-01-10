@@ -3,8 +3,11 @@ import { Prisma, Product } from '@prisma/client';
 
 export async function createProducts(products: productRepository.ProductParams[]): Promise<Product[]> {
   try{
-    console.log(products);
-    const newProducts = await productRepository.createProducts(products);
+    const newProducts = [];
+    for(const product of products){
+      const newProduct = await productRepository.createProduct(product);
+      newProducts.push(newProduct);
+    }
     return newProducts;
   }catch(e){
     throw new Error((e as Error).message)

@@ -31,20 +31,19 @@ export async function createCollection(collection: CollectionParams){
     }
 }
 
-export async function getCollections(where?): Promise<Collection[]> {
+export async function getCollections(): Promise<Collection[]> {
     try{
         const collections = await prisma.collection.findMany({
-            where: where ? where : undefined,
             include: {
-                products: {
-                    include:{
-                        variants: {
-                            include: {
-                                sizes: true
-                            }
-                        }
-                    }
-                }
+                // products: {
+                //     include:{
+                //         variants: {
+                //             include: {
+                //                 sizes: true
+                //             }
+                //         }
+                //     }
+                // }
             }
         })
         return collections

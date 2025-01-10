@@ -47,7 +47,9 @@ export default function RootLayout({
           <GenderContextProvider>
             <Header />
             <Navigation />
-            {children}
+            <div className="min-h-screen">
+              {children}
+            </div>
             <Footer />
           </GenderContextProvider>
         </CartProvider>

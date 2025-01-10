@@ -2,52 +2,45 @@ import { prisma } from "../prisma"
 import { Age, Brand, Category, Gender, Prisma, Product, Type } from "@prisma/client"
 import { VariantParams, VariantWithSizes } from "./variant.repository"
 
-export async function createProducts(products: ProductParams[]): Promise<Product[]> {
+export async function createProduct(product: ProductParams): Promise<Product> {
   try{
-    const newProducts = [] as Product[]
-    console.log(products[0].variants);
-    for(const product of products){
-      const newProduct = await prisma.product.create({
-        data: {
-          name: product.name,
-          model: product.model,
-          description: product.description.map(desc => JSON.stringify(desc)),
-          price: product.price,
-          image: product.image,
-          category: product.category as Category,
-          type: product.type as Type,
-          gender: product.gender as Gender,
-          ages: product.ages as Age[],
-          brand: {
-            connect: {
-              id: product.brandId
-            }
-          },
-          variants: {
-            create: product.variants.map(variant => ({
-              name: variant.name,
-              additionnalPrice: variant.additionnalPrice,
-              images: variant.images,
-              sizes: {
-                create: variant.sizes.map(size => ({
-                  name: size.name,
-                  stock: size.stock
-                }))
-              }
-            }))
-          },
-          collections: {
-            connect: product.collections.map(collection => ({
-              id: collection
-            }))
+    const newProduct = await prisma.product.create({
+      data: {
+        name: product.name,
+        model: product.model,
+        description: product.description.map(desc => JSON.stringify(desc)),
+        price: product.price,
+        image: product.image,
+        category: product.category as Category,
+        type: product.type as Type,
+        gender: product.gender as Gender,
+        ages: product.ages as Age[],
+        brand: {
+          connect: {
+            id: product.brandId
           }
+        },
+        variants: {
+          create: product.variants.map(variant => ({
+            name: variant.name,
+            additionnalPrice: variant.additionnalPrice,
+            images: variant.images,
+            sizes: {
+              create: variant.sizes.map(size => ({
+                name: size.name,
+                stock: size.stock
+              }))
+            }
+          }))
+        },
+        collections: {
+          connect: product.collections.map(collection => ({
+            id: collection
+          }))
         }
-      })
-      if(newProduct){
-        newProducts.push(newProduct)
       }
-    }
-    return newProducts
+    })
+    return newProduct
   }catch(e){
     throw new Error((e as Error).message)
   }finally{
@@ -55,10 +48,9 @@ export async function createProducts(products: ProductParams[]): Promise<Product
   }
 }
 
-export async function getProducts(where?): Promise<Product[]> {
+export async function getProducts(): Promise<Product[]> {
   try{
     const products = await prisma.product.findMany({
-      where: where ? where : undefined,
       include: {
         collections: true,
         variants: {
