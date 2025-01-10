@@ -2,10 +2,14 @@ import { Collection } from '@prisma/client';
 import { CollectionParams } from '../repositories/collection.repository';
 import * as collectionRepository from '../repositories/collection.repository';
 
-export async function createCollection(collection: CollectionParams){
+export async function createCollections(collections: CollectionParams[]): Promise<Collection[]> {
   try{
-    const newCollection = await collectionRepository.createCollection(collection);
-    return newCollection;
+    const newCollections = [];
+    for(const collection of collections){
+      const newCollection = await collectionRepository.createCollection(collection);
+      newCollections.push(newCollection);
+    }
+    return newCollections;
   }catch(e){
     throw new Error((e as Error).message);
   }

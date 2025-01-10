@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import * as collectionService from "../../../services/collection.service";
 
 export async function POST(req: NextRequest) {
-    const { collection } = await req.json();
+    const { collections } = await req.json();
     try{
-        if(!collection){
+        if(!collections){
             throw new Error("Brand is required");
         }else{
-            const newCollection = await collectionService.createCollection(collection);
+            const newCollection = await collectionService.createCollections(collections);
             if(newCollection){
                 return NextResponse.json({ collection: newCollection }, { status: 201 });
             }else{
