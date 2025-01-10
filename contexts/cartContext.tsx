@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { ICartVariant } from "../components/cards";
-import { SizeName } from "@prisma/client";
+import { Brand, Product, SizeName, Variant } from "@prisma/client";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -46,8 +45,16 @@ export function useCart(){
     return context;
 }
 
+export interface ProductType extends Product {
+    brand: Brand
+}
+
+export interface VariantType extends Variant {
+    product: Product
+}
+
 export interface CartItemType {
-    variant: ICartVariant
+    variant: VariantType
     size: SizeName
     quantity: number
 }

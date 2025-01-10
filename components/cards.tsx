@@ -61,7 +61,7 @@ export function CartVariantCard({cartItem, handleRemove}: Readonly<{cartItem: Ca
             </div>
             <div className="flex flex-col max-lg:flex-row gap-1">
                 <div className="">
-                    <h3 className="font-regular">{product.brand.name}</h3>
+                    <h3 className="font-regular">{(product as ProductWithVariants).brand.name}</h3>
                     <p className="">{product.name}</p>
                     <p className="font-bold">{numberToPrice(product.price + additionnalPrice)}</p>
                     <p>Couleur: {name}</p>
