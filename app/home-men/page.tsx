@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState} from "react";
-import { CollectionSection } from "../../components/sections";
+import { CollectionSection, CollectionSectionLoader } from "../../components/sections";
 import { useGender } from "../../contexts/genderContext";
 import { getCollectionsForMen } from "./action";
 import { CollectionWithProducts } from "../../repositories/collection.repository";
@@ -20,7 +20,14 @@ export default function Home() {
   }, []);
   return (
     <div className="">
-      {collections.map((collection, index) => <CollectionSection key={index} collection={collection as CollectionWithProducts} />)}
+      {collections.length > 0 ?
+        collections.map((collection, index) => <CollectionSection key={index} collection={collection as CollectionWithProducts} />):
+        <>
+          <CollectionSectionLoader />
+          <CollectionSectionLoader />
+          <CollectionSectionLoader />
+        </>
+      }
     </div>
   );
 }

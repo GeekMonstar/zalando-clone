@@ -21,7 +21,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": ["/"],
+      "@components/*": ["/components/*"],
+      "@services/*": ["/services/*"],
+      "@repositories/*": ["/repositories/"]
+    }
   },
   "include": [
     "next-env.d.ts",

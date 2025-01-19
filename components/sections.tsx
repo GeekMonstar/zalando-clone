@@ -43,5 +43,32 @@ export function CollectionSection({collection}:{collection: CollectionWithProduc
                 </div>
             </div>
         </section>
-    )
+    );
+}
+
+export function CollectionSectionLoader(){
+    return(
+        <section className="min-h-96 pb-5 flex flex-col items-start gap-2">
+            <div className="w-full flex flex-col lg:flex-row gap-3 max-xl:px-4 xl:px-32 2xl:px-96 pb-2">
+                <div className="w-full h-64 bg-gray-200 animate-pulse"></div>
+                <div className="flex flex-col gap-3">
+                    <div className="w-1/2 h-8 bg-gray-200 animate-pulse"></div>
+                    <div className="w-1/2 h-8 bg-gray-200 animate-pulse"></div>
+                    <div className="w-1/2 h-8 bg-gray-200 animate-pulse"></div>
+                    <div className="w-1/2 h-8 bg-gray-200 animate-pulse"></div>
+                    <div className="w-1/2 h-8 bg-gray-200 animate-pulse"></div>
+                </div>
+            </div>
+            <div className="w-full overflow-x-auto max-xl:px-4 xl:px-32 2xl:px-96">
+                <div className="w-fit flex gap-2">
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                    <CartLoader />
+                </div>
+            </div>
+        </section>);
 }
