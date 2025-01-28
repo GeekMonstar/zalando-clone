@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { Fragment, MouseEvent, useEffect, useState } from "react";
+import { Fragment, MouseEvent, use, useEffect, useState } from "react";
 import {useSearchParams} from "next/navigation";
 import { getProduct } from "./action";
 import { SelectSizeInput } from "../../../components/inputs";
@@ -10,8 +10,8 @@ import { ProductWithVariants } from "../../../repositories/product.repository";
 import { useCart } from "../../../contexts/cartContext";
 import { SizeName } from "@prisma/client";
 
-export default function Page({params} : {params: {productId: string}}) {
-    const {productId} = params;
+export default function Page({params} : {params: Promise<{productId: string}>}) {
+    const {productId} = use(params);
     const [product, setProduct] = useState<ProductWithVariants | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [currentVariant, setCurrentVariant] = useState<number>(0);

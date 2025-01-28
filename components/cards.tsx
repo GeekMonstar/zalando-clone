@@ -22,6 +22,23 @@ export function ProductCard({product}: Readonly<{product: ProductWithVariants}>)
     )
 }
 
+export function CollectionProductCard({product}: Readonly<{product: ProductWithVariants}>){
+    const {name, brand,  price, variants} = product;
+    return(
+        <div className="w-full relative">
+            <div className="w-full h-96">
+                <img className="w-full h-full object-cover" src={variants[0].images[0]} alt={name} />
+            </div>
+            <div className="">
+                <h3 className="font-regular">{brand.name}</h3>
+                <p className="">{name}</p>
+                <p className="font-bold">{numberToPrice(price)}</p>
+            </div>
+            <Link className="absolute left-0 top-0 w-full h-full" href={`/product/${product.id}`}></Link>
+        </div>
+    )
+}
+
 export function VariantCard({variant}: Readonly<{variant: VariantWithSizes}>){
     const {product, additionnalPrice, images} = variant;
     return(
