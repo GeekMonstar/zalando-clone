@@ -114,7 +114,7 @@ export default function Page({params} : {params: Promise<{productId: string}>}) 
                                     <Fragment key={index}>
                                         <button 
                                             key={d.name} 
-                                            onClick={()=>setDescriptionsIsOpen({...descriptionsIsOpen, [d.name.toLowerCase()]: !descriptionsIsOpen[d.name.toLowerCase()]})}
+                                            onClick={()=>setDescriptionsIsOpen({...descriptionsIsOpen, [d.name.toLowerCase()]: descriptionsIsOpen[d.name.toLowerCase()]})}
                                             className={`font-semibold text-lg flex justify-between items-center py-4 px-3 border-t-2`}>
                                             {d.name}
                                             <svg 
